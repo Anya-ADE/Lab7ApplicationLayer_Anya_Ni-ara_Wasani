@@ -43,6 +43,23 @@
 
                 document.getElementById("location").textContent =
                     `${locData.city}, ${locData.region}, ${locData.country_name}`;
+                /* ---- STEP 4: Get Weather Using Location ---- */
+                const lat = locData.latitude;
+                const lon = locData.longitude;
+
+                const API_KEY = "476e8f887e769150eb3e16ac522fcb2e";
+
+                const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
+                const weatherData = await weatherResponse.json();
+
+// Temperature in Celsius
+                const tempC = weatherData.main.temp;
+
+// Convert to Fahrenheit
+                const tempF = (tempC * 9/5) + 32;
+
+            document.getElementById("weather").textContent =`${weatherData.weather[0].description}, ${tempF.toFixed(1)}°F / ${tempC.toFixed(1)}°C`;
+
 
             } catch (error) {
                 document.getElementById("ip").textContent = "Error retrieving IP";
@@ -52,6 +69,8 @@
         }
 
         fetchIPandLocation();
+        
+
     </script>
 
     <footer>
@@ -60,4 +79,5 @@
 
 </body>
 </html>
+
 
