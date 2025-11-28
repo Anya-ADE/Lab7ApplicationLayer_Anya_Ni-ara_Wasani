@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fetch API Demo</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  button { margin-right: 10px; margin-bottom: 10px; padding: 8px 12px; }
+  #output { 
+    white-space: pre-wrap; 
+    background: #f4f4f4; 
+    padding: 15px; 
+    border: 1px solid #ccc; 
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<h2>Fetch API Demo with Buttons</h2>
+
+<button onclick="getTodo()">GET</button>
+<button onclick="postTodo()">POST</button>
+<button onclick="putTodo()">PUT</button>
+<button onclick="patchTodo()">PATCH</button>
+<button onclick="deleteTodo()">DELETE</button>
+
+<h3>Result:</h3>
+<div id="output">Click any button to see results here.</div>
+
+<script>
+const API = "https://jsonplaceholder.typicode.com/todos";
+
+// Utility function to display results
+function show(result) {
+  document.getElementById("output").textContent = 
+    JSON.stringify(result, null, 2);
+}
+
+// GET
+function getTodo() {
+  fetch(`${API}/1`)
+    .then(res => res.json())
+    .then(show)
+    .catch(err => show({ error: err.toString() }));
+}
+
+// POST
+function postTodo() {
+  fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId: 1,
+      title: "My NEW custom todo",
+      completed: false
+    })
+  })
+  .then(res => res.json())
+  .then(show)
+  .catch(err => show({ error: err.toString() }));
+}
+
+// PUT (full update)
+function putTodo() {
+  fetch(`${API}/1`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: 1,
+      userId: 1,
+      title: "Updated via PUT",
+      completed: true
+    })
+  })
+  .then(res => res.json())
+  .then(show)
+  .catch(err => show({ error: err.toString() }));
+}
+
+// PATCH (partial update)
+function patchTodo() {
+  fetch(`${API}/1`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ completed: true })
+  })
+  .then(res => res.json())
+  .then(show)
+  .catch(err => show({ error: err.toString() }));
+}
+
+// DELETE
+function deleteTodo() {
+  fetch(`${API}/1`, { method: "DELETE" })
+    .then(() => show({ message: "Todo deleted (fake API confirms)!" }))
+    .catch(err => show({ error: err.toString() }));
+}
+</script>
+
+</body>
+</html>
